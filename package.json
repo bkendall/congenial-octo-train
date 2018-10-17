@@ -1,0 +1,26 @@
+{
+  "name": "congenial-octo-train",
+  "version": "0.0.0",
+  "description": "A test module that does not much.",
+  "main": "index.js",
+  "scripts": {
+    "test": "semistandard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bkendall/congenial-octo-train.git"
+  },
+  "keywords": [
+    "test",
+    "nothing"
+  ],
+  "author": "Bryan Kendall <bryan@bryankendall.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bkendall/congenial-octo-train/issues"
+  },
+  "homepage": "https://github.com/bkendall/congenial-octo-train#readme",
+  "devDependencies": {
+    "semistandard": "^12.0.1"
+  }
+}
