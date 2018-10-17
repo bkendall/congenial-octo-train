@@ -1,0 +1,6 @@
+.npmignore
+lib
+!dist/lib
+index.js
+!dist/**/index.js
+tsconfig.json
