@@ -8,7 +8,7 @@
     "lint": "npm run lint:ts && npm run lint:js",
     "lint:ts": "tslint --project tsconfig.json --config tslint.json --exclude '**/node_modules/**' './**/*.ts'",
     "lint:js": "semistandard",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "test": "npm run build && npm run lint"
   },
   "repository": {
