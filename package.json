@@ -11,6 +11,9 @@
     "prepare": "npm run build",
     "test": "npm run build && npm run lint"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bkendall/congenial-octo-train.git"
