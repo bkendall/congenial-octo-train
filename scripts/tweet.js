@@ -1,5 +1,6 @@
 "use strict";
 
+const fs = require("fs");
 const Twitter = require("twitter");
 
 function printUsage() {
@@ -21,15 +22,18 @@ function getUrl(version) {
 }
 
 if (process.argv.length !== 3) {
+  console.error("Missing arguments.");
   printUsage();
 }
 
 const version = process.argv.pop();
 if (!version.match(/^\d+\.\d+\.\d$/)) {
+  console.error(`Version "${version}" not a version number.`);
   printUsage();
 }
 
-if (!fs.existsSync("./twitter.json")) {
+if (!fs.existsSync(`${__dirname}/twitter.json`)) {
+  console.error("Missing credentials.");
   printUsage();
 }
 const creds = require("./twitter.json");
