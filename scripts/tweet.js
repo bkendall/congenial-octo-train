@@ -27,7 +27,7 @@ if (process.argv.length !== 3) {
 }
 
 const version = process.argv.pop();
-if (!version.match(/^\d+\.\d+\.\d$/)) {
+if (!version.match(/^\d+\.\d+\.\d+$/)) {
   console.error(`Version "${version}" not a version number.`);
   printUsage();
 }
