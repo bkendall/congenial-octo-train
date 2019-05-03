@@ -1,7 +1,0 @@
-SOME GARBAGE
-
-*BOLD*
-
-# Heading
-
-With more stuff
