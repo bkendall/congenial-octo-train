@@ -1,0 +1,48 @@
+"use strict";
+
+const Twitter = require("twitter");
+
+function printUsage() {
+  console.error(
+`
+Usage: tweet.js <version>
+
+Credentials must be stored in "twitter.json" in this directory.
+
+Arguments:
+  - version: Version of module that was released. e.g. "1.2.3"
+`
+  );
+  process.exit(1);
+}
+
+function getUrl(version) {
+  return `https://github.com/bkendall/congenial-octo-train/releases/tag/v${version}`;
+}
+
+if (process.argv.length !== 3) {
+  printUsage();
+}
+
+const version = process.argv.pop();
+if (!version.match(/^\d+\.\d+\.\d$/)) {
+  printUsage();
+}
+
+if (!fs.existsSync("./twitter.json")) {
+  printUsage();
+}
+const creds = require("./twitter.json");
+
+const client = new Twitter(creds);
+
+client.post(
+  "statuses/update",
+  { status: `v${version} of @bkendall CLI is available. Release notes: ${getUrl(version)}` },
+  (err) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+  }
+);
