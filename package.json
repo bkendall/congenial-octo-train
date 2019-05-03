@@ -27,6 +27,9 @@
     "url": "https://github.com/bkendall/congenial-octo-train/issues"
   },
   "homepage": "https://github.com/bkendall/congenial-octo-train#readme",
+  "publishConfig":{
+    "registry": "https://wombat-dressing-room.appspot.com"
+  },
   "devDependencies": {
     "tslint": "^5.11.0",
     "typescript": "^3.1.3"
