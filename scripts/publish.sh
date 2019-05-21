@@ -12,6 +12,9 @@ VERSION=$1
 if [[ $VERSION == "" ]]; then
   printusage
   exit 1
+elif [[ ! ($VERSION == "patch" || $VERSION == "minor" || $VERSION == "major") ]]; then
+  printusage
+  exit 1
 fi
 
 WDIR=$(pwd)
@@ -31,9 +34,21 @@ which jq &> /dev/null
 trap - ERR
 echo "Checked for commands."
 
+echo "Checking for Twitter credentials..."
+trap "echo 'Missing Twitter credentials.'; exit 1" ERR
+test -f ${WDIR}/scripts/twitter.json
+trap - ERR
+echo "Checked for Twitter credentials..."
+
 echo "Using node 8..."
 nvm use 8
 echo "Using node 8."
+
+echo "Checking for logged-in user..."
+trap "echo 'Please login to npm using \`npm login --registry https://wombat-dressing-room.appspot.com\`'; exit 1" ERR
+npm whoami --registry https://wombat-dressing-room.appspot.com
+trap - ERR
+echo "Checked for logged-in user."
 
 echo "Moving to temporary directory.."
 TEMPDIR=$(mktemp -d)
@@ -81,7 +96,7 @@ echo "Published to npm."
 echo "Cleaning up release notes..."
 rm changelog.txt
 touch changelog.txt
-git commit -m "clearing release notes from v${NEW_VERSION} release" changelog.txt
+git commit -m "[firebase-release] Removed change log and reset repo after ${NEW_VERSION} release" changelog.txt
 echo "Cleaned up release notes."
 
 echo "Pushing to GitHub..."
