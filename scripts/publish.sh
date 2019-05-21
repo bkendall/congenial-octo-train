@@ -24,10 +24,15 @@ trap "echo 'Missing hub.'; exit 1" ERR
 which hub &> /dev/null
 trap - ERR
 
-trap "echo 'Missing nvm.'; exit 1" ERR
-file "${HOME}/.nvm/nvm.sh" &> /dev/null
-source "${HOME}/.nvm/nvm.sh"
+# trap "echo 'Missing nvm.'; exit 1" ERR
+# file "${HOME}/.nvm/nvm.sh" &> /dev/null
+# source "${HOME}/.nvm/nvm.sh"
+# trap - ERR
+
+trap "echo 'Missing node.'; exit 1" ERR
+which node &> /dev/null
 trap - ERR
+echo "Checked for commands."
 
 trap "echo 'Missing jq.'; exit 1" ERR
 which jq &> /dev/null
@@ -40,9 +45,9 @@ test -f ${WDIR}/scripts/twitter.json
 trap - ERR
 echo "Checked for Twitter credentials..."
 
-echo "Using node 8..."
-nvm use 8
-echo "Using node 8."
+# echo "Using node 8..."
+# nvm use 8
+# echo "Using node 8."
 
 echo "Checking for logged-in user..."
 trap "echo 'Please login to npm using \`npm login --registry https://wombat-dressing-room.appspot.com\`'; exit 1" ERR
