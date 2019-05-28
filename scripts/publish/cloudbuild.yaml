@@ -48,11 +48,14 @@ steps:
   secretEnv: ['NPM_TOKEN']
 - name: 'gcr.io/bkend-test-stuff/package-builder'
   dir: congenial-octo-train
-  args: ['bash', './scripts/publish.sh', 'patch']
+  args: ['bash', './scripts/publish.sh', '${_VERSION}']
   secretEnv: ['GITHUB_TOKEN']
   volumes:
   - name: 'ssh'
     path: /root/.ssh
+
+substitutions:
+  _VERSION:
 
 secrets:
 - kmsKeyName: projects/bkend-test-stuff/locations/global/keyRings/cloud-build-congenial-octo-train/cryptoKeys/cloud-build-key
