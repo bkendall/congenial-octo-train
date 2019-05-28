@@ -1,0 +1,62 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=cot_rsa.enc
+  - --plaintext-file=/root/.ssh/id_rsa
+  - --location=global
+  - --keyring=cloud-build-congenial-octo-train
+  - --key=cloud-build-key
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+# Set up git with key and domain.
+- name: 'gcr.io/cloud-builders/git'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    chmod 600 /root/.ssh/id_rsa
+    cat <<EOF >/root/.ssh/config
+    Hostname github.com
+    IdentityFile /root/.ssh/id_rsa
+    EOF
+    mv known_hosts /root/.ssh/known_hosts
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', 'git@github.com:bkendall/congenial-octo-train']
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+- name: 'gcr.io/cloud-builders/git'
+  dir: congenial-octo-train
+  args: ['config', '--global', 'user.email', 'bkend@google.com']
+- name: 'gcr.io/cloud-builders/git'
+  dir: congenial-octo-train
+  args: ['config', '--global', 'user.name', 'Bryan Kendall']
+# - name: 'gcr.io/bkend-test-stuff/package-builder'
+#   args: ['git', 'clone', 'git@github.com:bkendall/congenial-octo-train']
+- name: 'gcr.io/bkend-test-stuff/package-builder'
+  dir: congenial-octo-train
+  args: ['bash', '-c', 'echo $$TWITTER_CREDS > ./scripts/twitter.json']
+  secretEnv: ['TWITTER_CREDS']
+- name: 'gcr.io/bkend-test-stuff/package-builder'
+  args: ['bash', '-c', 'echo "//wombat-dressing-room.appspot.com/:_authToken=$$NPM_TOKEN" > ~/.npmrc']
+  secretEnv: ['NPM_TOKEN']
+- name: 'gcr.io/bkend-test-stuff/package-builder'
+  dir: congenial-octo-train
+  args: ['bash', './scripts/publish.sh', 'patch']
+  secretEnv: ['GITHUB_TOKEN']
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
+secrets:
+- kmsKeyName: projects/bkend-test-stuff/locations/global/keyRings/cloud-build-congenial-octo-train/cryptoKeys/cloud-build-key
+  secretEnv:
+    GITHUB_TOKEN: CiQAHn8u2VfVEwTSh2u3tDFMwvdga3iBzPw7Yb8yCtREwjwZICASUQD2zlY56viMpSFkrR+7bgaRlS54mel4J8pp5QAeU11ceqHepgEXHMNLfpeU52IN7XD9c1CBzAkAl8w3AJE9CuXNObDK8XHjK6BabDkCxoQr1Q==
+    TWITTER_CREDS: CiQAHn8u2RuXko/7+spLPrb1csxwto3UYgXZa2UgBNf9Zz+urZkSsQIA9s5WObYVHfckbhqos8fTLheq1AQzYjYyBRfFW/yyKagfF9o6t7JxoR7oFuHENEYNVHtCRD+aDiT3vBOJhVihXEdoLMID8n3kS/MC+1ZriSq+IAQHhBUGaN4pLtnHAs9c3aUXpTDF7wySLDYu27UbLZKMNwaZFAJEzQnuEHvjyg9EgGhGmJcGCKbBWiZWTRWIF7v5LHpgLl4exfIDddGh+P/rJGddTAZFIS1ZoRGRq6MsoMMmTT0xXuvZTBObshtlVBCOrpphToGSmg+18uslPWKjFOfPhsdPG7lC7YHlAeHLQ52ZdQt37CLLpTd0vU3PIpwDwS69JfACSwIF4Wbo2Ih+QNcuJ4VDzk3eQ2Tf9vq5uM8IA3rfjMDoQpKk6d2iV5Y+k5sB4Q8bHVMclt19ow==
+    NPM_TOKEN: CiQAHn8u2Yo8qiYTE9p+GFwD1mp05ykpui0tYwzoAVzhfBn+cLkSTAD2zlY5RIXVe7pW7NtmiNck6LpQighfBa5ZJACLdzzvcqjSnFqTa6DfY3MgZH9KKhSSQULM6zgu7CiHH96pK53wPxaBEfK2SL1N8hQ=
