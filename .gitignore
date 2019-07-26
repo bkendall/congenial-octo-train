@@ -2,3 +2,4 @@ node_modules
 dist
 *.tgz
 scripts/twitter.json
+change.sh
