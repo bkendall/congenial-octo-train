@@ -24,15 +24,9 @@ trap "echo 'Missing hub.'; exit 1" ERR
 which hub &> /dev/null
 trap - ERR
 
-# trap "echo 'Missing nvm.'; exit 1" ERR
-# file "${HOME}/.nvm/nvm.sh" &> /dev/null
-# source "${HOME}/.nvm/nvm.sh"
-# trap - ERR
-
 trap "echo 'Missing node.'; exit 1" ERR
 which node &> /dev/null
 trap - ERR
-echo "Checked for commands."
 
 trap "echo 'Missing jq.'; exit 1" ERR
 which jq &> /dev/null
@@ -41,15 +35,15 @@ echo "Checked for commands."
 
 echo "Checking for Twitter credentials..."
 trap "echo 'Missing Twitter credentials.'; exit 1" ERR
-test -f ${WDIR}/scripts/twitter.json
+test -f "${WDIR}/scripts/twitter.json"
 trap - ERR
 echo "Checked for Twitter credentials..."
 
-echo "Checking for logged-in user..."
+echo "Checking for logged-in npm user..."
 trap "echo 'Please login to npm using \`npm login --registry https://wombat-dressing-room.appspot.com\`'; exit 1" ERR
 npm whoami --registry https://wombat-dressing-room.appspot.com
 trap - ERR
-echo "Checked for logged-in user."
+echo "Checked for logged-in npm user."
 
 echo "Moving to temporary directory.."
 TEMPDIR=$(mktemp -d)
@@ -58,8 +52,8 @@ cd "${TEMPDIR}"
 echo "Moved to temporary directory."
 
 echo "Cloning repository..."
-git clone git@github.com:bkendall/congenial-octo-train.git
-cd congenial-octo-train
+git clone "git@github.com:${REPOSITORY}.git"
+cd "${REPOSITORY_NAME}"
 echo "Cloned repository."
 
 echo "Making sure there is a changelog..."
@@ -110,6 +104,6 @@ echo "Published release notes."
 
 echo "Making the tweet..."
 npm install --no-save twitter@1.7.1
-cp -v ${WDIR}/scripts/twitter.json ${TEMPDIR}/congenial-octo-train/scripts/
+cp -v "${WDIR}/scripts/twitter.json" "${TEMPDIR}/${REPOSITORY_NAME}/scripts/"
 node ./scripts/tweet.js ${NEW_VERSION}
 echo "Made the tweet."
