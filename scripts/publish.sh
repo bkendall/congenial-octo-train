@@ -45,12 +45,6 @@ test -f ${WDIR}/scripts/twitter.json
 trap - ERR
 echo "Checked for Twitter credentials..."
 
-echo "Checking for npm credentials..."
-trap "echo 'Missing npm credentials.'; exit 1" ERR
-test -f ${WDIR}/.npmrc
-trap - ERR
-echo "Checked for npm credentials..."
-
 echo "Checking for logged-in user..."
 trap "echo 'Please login to npm using \`npm login --registry https://wombat-dressing-room.appspot.com\`'; exit 1" ERR
 npm whoami --registry https://wombat-dressing-room.appspot.com
@@ -97,7 +91,6 @@ cat changelog.txt >> "${RELEASE_NOTES_FILE}"
 echo "Made the release notes."
 
 echo "Publishing to npm..."
-cp -v ${WDIR}/.npmrc ${TEMPDIR}/congenial-octo-train/
 npm publish
 echo "Published to npm."
 
