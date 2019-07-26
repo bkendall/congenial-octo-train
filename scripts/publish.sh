@@ -3,6 +3,8 @@ set -e
 
 printusage() {
   echo "publish.sh <version>"
+  echo "REPOSITORY and REPOSITORY_NAME should be set in the environment."
+  echo "e.g. REPOSITORY=user/repo, REPOSITORY_NAME=repo"
   echo ""
   echo "Arguments:"
   echo "  version: 'patch', 'minor', or 'major'."
@@ -13,6 +15,15 @@ if [[ $VERSION == "" ]]; then
   printusage
   exit 1
 elif [[ ! ($VERSION == "patch" || $VERSION == "minor" || $VERSION == "major") ]]; then
+  printusage
+  exit 1
+fi
+
+if [[ $REPOSITORY == "" ]]; then
+  printusage
+  exit 1
+fi
+if [[ $REPOSITORY_NAME == "" ]]; then
   printusage
   exit 1
 fi
