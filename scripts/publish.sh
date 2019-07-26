@@ -45,9 +45,11 @@ test -f ${WDIR}/scripts/twitter.json
 trap - ERR
 echo "Checked for Twitter credentials..."
 
-# echo "Using node 8..."
-# nvm use 8
-# echo "Using node 8."
+echo "Checking for npm credentials..."
+trap "echo 'Missing npm credentials.'; exit 1" ERR
+test -f ${WDIR}/.npmrc
+trap - ERR
+echo "Checked for npm credentials..."
 
 echo "Checking for logged-in user..."
 trap "echo 'Please login to npm using \`npm login --registry https://wombat-dressing-room.appspot.com\`'; exit 1" ERR
@@ -95,6 +97,7 @@ cat changelog.txt >> "${RELEASE_NOTES_FILE}"
 echo "Made the release notes."
 
 echo "Publishing to npm..."
+cp -v ${WDIR}/.npmrc ${TEMPDIR}/congenial-octo-train/
 npm publish
 echo "Published to npm."
 
@@ -114,6 +117,6 @@ echo "Published release notes."
 
 echo "Making the tweet..."
 npm install --no-save twitter@1.7.1
-cp ${WDIR}/scripts/twitter.json ${TEMPDIR}/congenial-octo-train/scripts/
+cp -v ${WDIR}/scripts/twitter.json ${TEMPDIR}/congenial-octo-train/scripts/
 node ./scripts/tweet.js ${NEW_VERSION}
 echo "Made the tweet."
