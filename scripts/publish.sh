@@ -3,8 +3,8 @@ set -e
 
 printusage() {
   echo "publish.sh <version>"
-  echo "REPOSITORY and REPOSITORY_NAME should be set in the environment."
-  echo "e.g. REPOSITORY=user/repo, REPOSITORY_NAME=repo"
+  echo "REPOSITORY_ORG and REPOSITORY_NAME should be set in the environment."
+  echo "e.g. REPOSITORY_ORG=user, REPOSITORY_NAME=repo"
   echo ""
   echo "Arguments:"
   echo "  version: 'patch', 'minor', or 'major'."
@@ -19,7 +19,7 @@ elif [[ ! ($VERSION == "patch" || $VERSION == "minor" || $VERSION == "major") ]]
   exit 1
 fi
 
-if [[ $REPOSITORY == "" ]]; then
+if [[ $REPOSITORY_ORG == "" ]]; then
   printusage
   exit 1
 fi
@@ -63,7 +63,7 @@ cd "${TEMPDIR}"
 echo "Moved to temporary directory."
 
 echo "Cloning repository..."
-git clone "git@github.com:${REPOSITORY}.git"
+git clone "git@github.com:${REPOSITORY_ORG}/${REPOSITORY_NAME}.git"
 cd "${REPOSITORY_NAME}"
 echo "Cloned repository."
 
