@@ -30,7 +30,7 @@ steps:
 
 # Clone the repository.
 - name: 'gcr.io/cloud-builders/git'
-  args: ['clone', 'git@github.com:${_REPOSITORY}']
+  args: ['clone', 'git@github.com:${_REPOSITORY_ORG}/${_REPOSITORY_NAME}']
 
 # Set up the Git configuration.
 - name: 'gcr.io/cloud-builders/git'
@@ -60,7 +60,7 @@ steps:
   dir: '${_REPOSITORY_NAME}'
   args: ['bash', './scripts/publish.sh', '${_VERSION}']
   env:
-    - 'REPOSITORY=${_REPOSITORY}'
+    - 'REPOSITORY_ORG=${_REPOSITORY_ORG}'
     - 'REPOSITORY_NAME=${_REPOSITORY_NAME}'
 
 options:
@@ -72,5 +72,5 @@ substitutions:
   _VERSION: ''
   _KEY_RING: 'cloud-build-ring'
   _KEY_NAME: 'publish'
-  _REPOSITORY: 'bkendall/congenial-octo-train'
+  _REPOSITORY_ORG: 'bkendall'
   _REPOSITORY_NAME: 'congenial-octo-train'
